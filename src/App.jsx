@@ -12,6 +12,11 @@ import PerfilAlumno from './pages/alumno/PerfilAlumno';
 import DashboardEmpresa from './pages/empresa/DashboardEmpresa';
 import Tecnologias from './pages/admin/Tecnologias';
 
+// Ofertas
+import CrearOferta from './pages/empresa/CrearOferta';
+import ValidarOfertas from './pages/admin/ValidarOfertas';
+import BuscadorOfertas from './pages/alumno/BuscadorOfertas';
+
 // Helper Wrapper
 const MainLayout = ({ children }) => <><Navbar />{children}</>;
 
@@ -28,6 +33,7 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<Tecnologias />} />
           <Route path="/admin/tecnologias" element={<Tecnologias />} />
+          <Route path="/admin/ofertas/validar" element={<ValidarOfertas />} />
         </Route>
       )}
 
@@ -40,6 +46,11 @@ function App() {
             </MainLayout>
           } />
           <Route path="/alumno/perfil" element={<MainLayout><PerfilAlumno /></MainLayout>} />
+          {/* NUEVA: Empresa crea oferta */}
+          <Route path="/empresa/ofertas/crear" element={<MainLayout><CrearOferta /></MainLayout>} />
+
+          {/* NUEVA: Alumno busca oferta */}
+          <Route path="/ofertas" element={<MainLayout><BuscadorOfertas /></MainLayout>} />
         </>
       )}
 
