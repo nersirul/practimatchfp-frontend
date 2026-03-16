@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import client from '../../api/axios';
 
 export default function BuscadorOfertas() {
@@ -21,13 +22,11 @@ export default function BuscadorOfertas() {
 
     const cargarOfertas = async () => {
         try {
-            // Construir QueryString para la API (?modalidad=X&tecnologias[]=Y)
             let query = '/ofertas?';
             if (filtroModalidad) query += `modalidad=${filtroModalidad}&`;
             if (filtroTech) query += `tecnologias[]=${filtroTech}`;
 
             const res = await client.get(query);
-            // La API de Laravel devuelve paginate(10), los datos están en res.data.data
             setOfertas(res.data.data);
         } catch (error) {
             console.error(error);
@@ -40,8 +39,8 @@ export default function BuscadorOfertas() {
                 <h1 className="text-3xl font-bold text-primary-900 mb-2">Ofertas de Prácticas</h1>
                 <p className="text-gray-600 mb-8">Encuentra las mejores oportunidades para ti.</p>
 
-                {/* Barra de Filtros (Basado en ofertas.jpg) */}
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-6 flex gap-4">
+                {/* Barra de Filtros */}
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-6 flex flex-wrap gap-4 items-center">
                     <select value={filtroModalidad} onChange={e => setFiltroModalidad(e.target.value)}
                         className="border border-gray-300 rounded-lg p-2 outline-none text-sm text-gray-700 bg-gray-50 w-48">
                         <option value="">Todas las Modalidades</option>
@@ -68,7 +67,9 @@ export default function BuscadorOfertas() {
                 {/* Listado de Tarjetas */}
                 <div className="space-y-4">
                     {ofertas.length === 0 ? (
-                        <div className="text-center py-10 text-gray-500">No hay ofertas que coincidan con tu búsqueda.</div>
+                        <div className="bg-white p-10 rounded-xl shadow-sm text-center py-10 text-gray-500 border border-gray-100">
+                            No hay ofertas que coincidan con tu búsqueda.
+                        </div>
                     ) : (
                         ofertas.map(oferta => (
                             <div key={oferta.id_oferta} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
@@ -89,9 +90,11 @@ export default function BuscadorOfertas() {
                                             </span>
                                         ))}
                                     </div>
-                                    <button className="text-accent-600 font-bold hover:underline text-sm flex items-center gap-1">
+
+                                    {/* ENLACE MODIFICADO PARA EL SPRINT 4 */}
+                                    <Link to={`/ofertas/${oferta.id_oferta}`} className="text-accent-600 font-bold hover:underline text-sm flex items-center gap-1">
                                         Ver detalles &gt;
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))

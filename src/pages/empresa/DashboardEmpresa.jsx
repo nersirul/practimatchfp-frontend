@@ -21,25 +21,18 @@ export default function DashboardEmpresa() {
         }
     };
 
-    // Helper para pintar el estado de la oferta con sus colores correctos
     const getBadgeEstado = (estado) => {
         switch (estado) {
-            case 'PUBLICADA':
-                return <span className="bg-status-active text-status-activeText px-3 py-1 rounded-full text-xs font-bold">Activa</span>;
-            case 'PENDIENTE':
-                return <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">En Revisión</span>;
-            case 'CERRADA':
-                return <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">Cerrada</span>;
-            default:
-                return <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-bold">{estado}</span>;
+            case 'PUBLICADA': return <span className="bg-status-active text-status-activeText px-3 py-1 rounded-full text-xs font-bold">Activa</span>;
+            case 'PENDIENTE': return <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">En Revisión</span>;
+            case 'CERRADA': return <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">Cerrada</span>;
+            default: return <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-bold">{estado}</span>;
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-5xl mx-auto">
-
-                {/* Cabecera */}
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold text-primary-900">Dashboard de Empresa</h1>
                     <Link
@@ -50,7 +43,6 @@ export default function DashboardEmpresa() {
                     </Link>
                 </div>
 
-                {/* Contenido (Listado de Ofertas) */}
                 {cargando ? (
                     <div className="text-center py-12 text-gray-500">Cargando tus ofertas...</div>
                 ) : ofertas.length === 0 ? (
@@ -73,20 +65,18 @@ export default function DashboardEmpresa() {
                                             <span>{oferta.posibilidad_contratacion ? 'Con posibilidad de contrato' : 'Solo prácticas'}</span>
                                         </div>
                                     </div>
-                                    <div>
-                                        {getBadgeEstado(oferta.estado)}
-                                    </div>
+                                    <div>{getBadgeEstado(oferta.estado)}</div>
                                 </div>
 
                                 <div className="mt-6 flex justify-between items-center border-t pt-4">
                                     <div className="flex items-center gap-2 text-gray-600">
-                                        {/* Nota: En el Sprint 4 implementaremos el conteo real de alumnos inscritos. Por ahora mostramos 0 */}
-                                        🎓 <span className="font-bold">0</span> Alumnos inscritos
+                                        👥 <span className="font-bold">Ver</span> Alumnos inscritos
                                     </div>
 
-                                    <button className="text-blue-600 font-medium hover:underline flex items-center transition">
+                                    {/* ENLACE MODIFICADO PARA EL SPRINT 4 */}
+                                    <Link to={`/empresa/ofertas/${oferta.id_oferta}/candidatos`} className="text-blue-600 font-medium hover:underline flex items-center transition">
                                         Gestionar candidatos &gt;
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
