@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import DashboardAlumno from './pages/alumno/DashboardAlumno';
 import PerfilAlumno from './pages/alumno/PerfilAlumno';
 import DashboardEmpresa from './pages/empresa/DashboardEmpresa';
+import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
 import Tecnologias from './pages/admin/Tecnologias';
 
 // Ofertas
@@ -46,10 +47,9 @@ function App() {
             </MainLayout>
           } />
           <Route path="/alumno/perfil" element={<MainLayout><PerfilAlumno /></MainLayout>} />
-          {/* NUEVA: Empresa crea oferta */}
+          <Route path="/empresa/perfil" element={<MainLayout><PerfilEmpresa /></MainLayout>} />
           <Route path="/empresa/ofertas/crear" element={<MainLayout><CrearOferta /></MainLayout>} />
 
-          {/* NUEVA: Alumno busca oferta */}
           <Route path="/ofertas" element={<MainLayout><BuscadorOfertas /></MainLayout>} />
         </>
       )}

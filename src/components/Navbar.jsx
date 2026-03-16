@@ -21,6 +21,7 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center space-x-8 text-gray-600 font-medium">
                         <Link to="/dashboard" className="hover:text-primary-900">Inicio</Link>
                         {user?.id_alumno && <Link to="/alumno/perfil" className="hover:text-primary-900">Mi Perfil</Link>}
+                        {user?.id_empresa && <Link to="/empresa/perfil" className="hover:text-primary-900">Perfil Empresa</Link>}
                     </div>
 
                     <div className="flex items-center">

@@ -48,6 +48,7 @@ export default function Login() {
                         >
                             <option value="alumno">Alumno</option>
                             <option value="empresa">Empresa</option>
+                            <option value="profesor">Profesor del Centro</option>
                             <option value="admin">Administrador</option>
                         </select>
                     </div>

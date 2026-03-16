@@ -48,6 +48,9 @@ export default function PerfilAlumno() {
                         <input type="text" value={perfil.nombre} onChange={e => setPerfil({ ...perfil, nombre: e.target.value })} className="border p-2 rounded" placeholder="Nombre" />
                         <input type="text" value={perfil.apellidos} onChange={e => setPerfil({ ...perfil, apellidos: e.target.value })} className="border p-2 rounded" placeholder="Apellidos" />
                         <input type="text" value={perfil.ciclo} onChange={e => setPerfil({ ...perfil, ciclo: e.target.value })} className="border p-2 rounded" placeholder="Ciclo (DAW/DAM)" />
+                        <input type="text" value={perfil.telefono || ''} onChange={e => setPerfil({ ...perfil, telefono: e.target.value })} className="border p-2 rounded" placeholder="Teléfono" />
+                        <input type="text" value={perfil.direccion || ''} onChange={e => setPerfil({ ...perfil, direccion: e.target.value })} className="border p-2 rounded" placeholder="Dirección"/>
+                        <input type="text" value={perfil.ciudad || ''} onChange={e => setPerfil({ ...perfil, ciudad: e.target.value })} className="border p-2 rounded" placeholder="Ciudad" />
                         <select value={perfil.modalidad_preferida} onChange={e => setPerfil({ ...perfil, modalidad_preferida: e.target.value })} className="border p-2 rounded">
                             <option value="PRESENCIAL">Presencial</option>
                             <option value="REMOTO">Remoto</option>
