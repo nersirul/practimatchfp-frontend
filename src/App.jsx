@@ -25,6 +25,9 @@ import PerfilEmpresa from './pages/empresa/PerfilEmpresa'; // DEL SPRINT 3.5
 import CrearOferta from './pages/empresa/CrearOferta';
 import GestionCandidatos from './pages/empresa/GestionCandidatos'; // NUEVO SPRINT 4
 
+// Páginas (Profesor)
+import DashboardProfesor from './pages/profesor/DashboardProfesor';
+
 
 const MainLayout = ({ children }) => (
   <>
@@ -39,6 +42,7 @@ function App() {
   // Helpers para detectar roles
   const isAdmin = user?.hasOwnProperty('id_admin');
   const isAlumno = user?.hasOwnProperty('id_alumno');
+  const isProfesor = user?.hasOwnProperty('id_profesor');
 
   return (
     <Routes>
@@ -63,7 +67,7 @@ function App() {
           {/* Dashboard dinámico según rol */}
           <Route path="/dashboard" element={
             <MainLayout>
-              {isAlumno ? <DashboardAlumno /> : <DashboardEmpresa />}
+              {isProfesor ? <DashboardProfesor /> : (isAlumno ? <DashboardAlumno /> : <DashboardEmpresa />)}
             </MainLayout>
           } />
 
