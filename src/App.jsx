@@ -7,6 +7,7 @@ import AdminLayout from './components/AdminLayout';
 
 // Páginas (Auth & Generales)
 import Login from './pages/Login';
+import Registro from './pages/Registro';
 
 // Páginas (Admin)
 import Tecnologias from './pages/admin/Tecnologias';
@@ -47,6 +48,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<Registro />} />
 
       {/* =======================
           RUTAS ADMIN (Sidebar)
