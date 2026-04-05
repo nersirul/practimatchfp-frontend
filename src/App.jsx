@@ -12,6 +12,8 @@ import Registro from './pages/Registro';
 // Páginas (Admin)
 import Tecnologias from './pages/admin/Tecnologias';
 import ValidarOfertas from './pages/admin/ValidarOfertas';
+import ValidarEmpresas from './pages/admin/ValidarEmpresas';
+import GestionUsuarios from './pages/admin/GestionUsuarios';
 
 // Páginas (Alumno)
 import DashboardAlumno from './pages/alumno/DashboardAlumno';
@@ -58,6 +60,8 @@ function App() {
           <Route path="/dashboard" element={<ValidarOfertas />} />
           <Route path="/admin/tecnologias" element={<Tecnologias />} />
           <Route path="/admin/ofertas/validar" element={<ValidarOfertas />} />
+          <Route path="/admin/empresas/validar" element={<ValidarEmpresas />} />
+          <Route path="/admin/usuarios" element={<GestionUsuarios />} />
         </Route>
       )}
 

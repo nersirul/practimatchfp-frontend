@@ -17,14 +17,23 @@ export default function AdminLayout() {
                 <nav className="p-4 space-y-2 flex-1">
                     <div className="text-xs font-bold text-gray-400 uppercase mb-2 mt-2">Menú Principal</div>
 
-                    {/* Enlace a Gestión de Tecnologías */}
                     <Link to="/admin/tecnologias" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-accent-50 hover:text-accent-600 rounded-lg font-medium transition">
                         🛠️ Tecnologías
                     </Link>
 
-                    {/* NUEVO: Enlace a Validación de Ofertas */}
                     <Link to="/admin/ofertas/validar" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-accent-50 hover:text-accent-600 rounded-lg font-medium transition">
                         ✅ Validar Ofertas
+                    </Link>
+
+                    {/* NUEVOS ENLACES SPRINT 5.6 */}
+                    <div className="text-xs font-bold text-gray-400 uppercase mb-2 mt-6">Gestión de Usuarios</div>
+
+                    <Link to="/admin/empresas/validar" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-accent-50 hover:text-accent-600 rounded-lg font-medium transition">
+                        🏢 Validar Empresas
+                    </Link>
+
+                    <Link to="/admin/usuarios" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-accent-50 hover:text-accent-600 rounded-lg font-medium transition">
+                        👥 Gestión Usuarios
                     </Link>
                 </nav>
 
