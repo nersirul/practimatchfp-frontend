@@ -1,3 +1,11 @@
+/**
+ * Componente: DashboardProfesor
+ * Módulo: Views/Profesor
+ * 
+ * Componente del perfil Profesor. Dedicado a la supervisión y evaluación de prácticas activas.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import client from '../../api/axios';

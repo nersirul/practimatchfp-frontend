@@ -1,3 +1,11 @@
+/**
+ * Componente: Registro
+ * Módulo: Views/Public
+ * 
+ * Página o vista pública / general de la aplicación PractiMatch FP.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import client from '../api/axios';

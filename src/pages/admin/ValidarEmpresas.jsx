@@ -1,3 +1,11 @@
+/**
+ * Componente: ValidarEmpresas
+ * Módulo: Views/Admin
+ * 
+ * Componente del módulo de Administración (SuperAdmin). Gestiona configuraciones, listados y validaciones del sistema.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
 

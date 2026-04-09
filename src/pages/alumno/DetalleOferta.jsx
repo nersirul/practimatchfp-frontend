@@ -1,12 +1,24 @@
+/**
+ * Componente: DetalleOferta
+ * Módulo: Views/Alumno
+ * 
+ * Componente del perfil Alumno. Permite visualizar y gestionar candidaturas, perfil y catálogo de ofertas públicas.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import client from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 export default function DetalleOferta() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [oferta, setOferta] = useState(null);
     const [enviando, setEnviando] = useState(false);
+
+    const isAlumno = user?.hasOwnProperty('id_alumno') || user?.id_alumno;
 
     useEffect(() => {
         client.get(`/ofertas/${id}`).then(res => setOferta(res.data)).catch(() => navigate('/ofertas'));
@@ -32,13 +44,13 @@ export default function DetalleOferta() {
     if (!oferta) return <div className="p-10 text-center">Cargando oferta...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6 md:p-8">
+        <div className="min-h-[calc(100vh-80px)] bg-[#f8fafc] p-6 md:p-8">
             <div className="max-w-4xl mx-auto">
-                <Link to="/ofertas" className="text-gray-500 hover:text-primary-900 mb-6 inline-block">
+                <Link to="/ofertas" className="text-gray-500 hover:text-primary-900 mb-6 inline-block font-medium">
                     &larr; Volver a Ofertas
                 </Link>
 
-                <h1 className="text-3xl font-bold text-primary-900 mb-6">{oferta.titulo}</h1>
+                <h1 className="text-3xl font-bold text-primary-900 mb-6 tracking-tight">{oferta.titulo}</h1>
 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     {/* Cabecera Tarjeta */}
@@ -53,13 +65,15 @@ export default function DetalleOferta() {
                                 <span>💰 {oferta.es_remunerada ? 'Remunerada' : 'No remunerada'}</span>
                             </div>
                         </div>
-                        <button
-                            onClick={handleSolicitar}
-                            disabled={enviando}
-                            className="bg-accent-500 hover:bg-accent-600 disabled:bg-gray-400 text-white font-bold px-8 py-3 rounded-lg shadow transition w-full md:w-auto"
-                        >
-                            {enviando ? 'Enviando...' : 'Solicitar Práctica'}
-                        </button>
+                        {isAlumno && (
+                            <button
+                                onClick={handleSolicitar}
+                                disabled={enviando}
+                                className="bg-accent-500 hover:bg-accent-600 disabled:bg-gray-400 text-white font-bold px-8 py-3 rounded-lg shadow transition w-full md:w-auto transform hover:-translate-y-0.5"
+                            >
+                                {enviando ? 'Enviando...' : 'Solicitar Práctica'}
+                            </button>
+                        )}
                     </div>
 
                     {/* Tecnologías */}

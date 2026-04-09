@@ -1,14 +1,26 @@
+/**
+ * Cliente HTTP Axios - axios.js
+ * 
+ * Centraliza toda la comunicación asíncrona hacia el Backend (API Laravel).
+ * Dispone de una URL base predefinida e interceptores inteligentes que inyectan 
+ * de manera transparente los tokens de seguridad de Sanctum en las peticiones.
+ */
+
 import axios from 'axios';
 
 const client = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api', // Asegúrate de que Laravel corre en este puerto
+    baseURL: 'http://127.0.0.1:8000/api', 
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
 });
 
-// Interceptor: Inyecta el token automáticamente si existe
+/**
+ * Middleware de Petición.
+ * Evalúa si hay un portador (token) en el Storage local antes de enviar la
+ * petición a la red, incrustándolo bajo la cabecera `Authorization`.
+ */
 client.interceptors.request.use((config) => {
     const token = localStorage.getItem('ACCESS_TOKEN');
     if (token) {

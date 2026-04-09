@@ -1,3 +1,11 @@
+/**
+ * Componente: BuscadorOfertas
+ * Módulo: Views/Alumno
+ * 
+ * Componente del perfil Alumno. Permite visualizar y gestionar candidaturas, perfil y catálogo de ofertas públicas.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import client from '../../api/axios';

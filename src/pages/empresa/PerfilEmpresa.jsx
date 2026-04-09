@@ -1,3 +1,11 @@
+/**
+ * Componente: PerfilEmpresa
+ * Módulo: Views/Empresa
+ * 
+ * Componente del perfil Empresa. Facilita la creación de vacantes y la validación de postulantes.
+ * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
+ */
+
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
 
