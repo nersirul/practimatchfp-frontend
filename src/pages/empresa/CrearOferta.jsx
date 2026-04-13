@@ -1,8 +1,7 @@
 /**
  * Componente: CrearOferta
  * Módulo: Views/Empresa
- * 
- * Componente del perfil Empresa. Facilita la creación de vacantes y la validación de postulantes.
+ * * Componente del perfil Empresa. Facilita la creación de vacantes y la validación de postulantes.
  * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
  */
 
@@ -13,8 +12,10 @@ import client from '../../api/axios';
 export default function CrearOferta() {
     const navigate = useNavigate();
     const [catalogoTech, setCatalogoTech] = useState([]);
+
+    // AÑADIDO: 'vacantes' al estado inicial
     const [formData, setFormData] = useState({
-        titulo: '', descripcion: '', modalidad: 'PRESENCIAL',
+        titulo: '', descripcion: '', modalidad: 'PRESENCIAL', vacantes: '',
         es_remunerada: false, posibilidad_contratacion: false, tecnologias: []
     });
 
@@ -32,10 +33,20 @@ export default function CrearOferta() {
         });
     };
 
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await client.post('/empresa/ofertas', formData);
+            // AÑADIDO: Formatear las vacantes a entero o null
+            const payload = {
+                ...formData,
+                vacantes: formData.vacantes === '' ? null : parseInt(formData.vacantes, 10)
+            };
+
+            await client.post('/empresa/ofertas', payload);
             alert("¡Oferta enviada! Un administrador la revisará pronto.");
             navigate('/dashboard'); // Volver al panel
         } catch (error) {
@@ -49,30 +60,37 @@ export default function CrearOferta() {
             <p className="text-gray-600 mb-8">Rellena los detalles. Las ofertas pasarán por un proceso de validación.</p>
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                {/* Título y Modalidad */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                {/* Título, Modalidad y Vacantes */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="md:col-span-1">
                         <label className="block text-sm font-bold text-gray-700 mb-1">Título del Puesto</label>
-                        <input type="text" required className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 focus:border-accent-500 outline-none"
-                            value={formData.titulo} onChange={e => setFormData({ ...formData, titulo: e.target.value })}
+                        <input type="text" name="titulo" required className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 focus:border-accent-500 outline-none"
+                            value={formData.titulo} onChange={handleChange}
                             placeholder="Ej: Desarrollador Frontend Junior" />
                     </div>
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-1">Modalidad</label>
-                        <select className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 outline-none"
-                            value={formData.modalidad} onChange={e => setFormData({ ...formData, modalidad: e.target.value })}>
+                        <select name="modalidad" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 outline-none"
+                            value={formData.modalidad} onChange={handleChange}>
                             <option value="PRESENCIAL">Presencial</option>
                             <option value="REMOTO">Remoto</option>
                             <option value="HIBRIDO">Híbrido</option>
                         </select>
+                    </div>
+                    {/* AÑADIDO: Input de Vacantes */}
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1">Nº Vacantes (Opcional)</label>
+                        <input type="number" name="vacantes" min="1" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 focus:border-accent-500 outline-none"
+                            value={formData.vacantes} onChange={handleChange}
+                            placeholder="Ilimitadas si está vacío" />
                     </div>
                 </div>
 
                 {/* Descripción */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">Descripción y Tareas</label>
-                    <textarea required rows="5" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 outline-none resize-none"
-                        value={formData.descripcion} onChange={e => setFormData({ ...formData, descripcion: e.target.value })}
+                    <textarea name="descripcion" required rows="5" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-accent-500 outline-none resize-none"
+                        value={formData.descripcion} onChange={handleChange}
                         placeholder="Describe las tareas que realizará el alumno..."></textarea>
                 </div>
 
@@ -98,8 +116,8 @@ export default function CrearOferta() {
                             <button type="button" key={tech.id_tecnologia}
                                 onClick={() => handleTechToggle(tech.id_tecnologia)}
                                 className={`px-4 py-2 rounded-full border text-sm font-bold transition ${formData.tecnologias.includes(tech.id_tecnologia)
-                                        ? 'bg-accent-500 text-white border-accent-600 shadow-md'
-                                        : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                                    ? 'bg-accent-500 text-white border-accent-600 shadow-md'
+                                    : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
                                     }`}>
                                 {tech.nombre}
                             </button>
