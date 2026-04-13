@@ -38,8 +38,6 @@ export default function DashboardEmpresa() {
         }
     };
 
-    // Helper for mockup data when not provided by API
-    const mockLocation = "Madrid";
 
     return (
         <div className="min-h-[calc(100vh-80px)] bg-[#f8fafc] p-6 text-gray-800">
@@ -72,7 +70,7 @@ export default function DashboardEmpresa() {
                                     <div>{getBadgeEstado(oferta.estado)}</div>
                                 </div>
                                 <div className="text-gray-600 text-sm mb-6 font-medium">
-                                    {mockLocation} | {oferta.modalidad || 'Presencial'}
+                                    {oferta.empresa?.ciudad || 'No especificada'} | {oferta.modalidad || 'Presencial'}
                                 </div>
                                 
                                 <div className="flex justify-between items-center border-t border-gray-100 pt-4">
