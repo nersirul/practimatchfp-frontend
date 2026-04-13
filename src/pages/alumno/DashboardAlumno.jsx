@@ -1,8 +1,7 @@
 /**
  * Componente: DashboardAlumno
  * Módulo: Views/Alumno
- * 
- * Componente del perfil Alumno. Permite visualizar y gestionar candidaturas, perfil y catálogo de ofertas públicas.
+ * * Componente del perfil Alumno. Permite visualizar y gestionar candidaturas, perfil y catálogo de ofertas públicas.
  * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
  */
 
@@ -15,15 +14,24 @@ export default function DashboardAlumno() {
     const { user } = useAuth();
     const [stats, setStats] = useState({ enviadas: 0, en_proceso: 0, seleccionado: 0 });
     const [ofertasDestacadas, setOfertasDestacadas] = useState([]);
+
+    // NUEVO: Estado para el Centro y el Tutor
+    const [infoAcademica, setInfoAcademica] = useState({ centro: null, profesor: null });
     const [cargando, setCargando] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
         const cargarDashboard = async () => {
             try {
-                const res = await client.get('/alumno/dashboard');
-                setStats(res.data.stats);
-                setOfertasDestacadas(res.data.ofertasDestacadas);
+                // Hacemos las dos peticiones a la vez para que cargue súper rápido
+                const [resDashboard, resInfo] = await Promise.all([
+                    client.get('/alumno/dashboard'),
+                    client.get('/alumno/info-academica')
+                ]);
+
+                setStats(resDashboard.data.stats);
+                setOfertasDestacadas(resDashboard.data.ofertasDestacadas);
+                setInfoAcademica(resInfo.data);
             } catch (error) {
                 console.error("Error cargando dashboard de alumno:", error);
             } finally {
@@ -46,9 +54,43 @@ export default function DashboardAlumno() {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6">
-                    {/* Left Column - Stats & Quick Links */}
+                    {/* Left Column - Stats, Academic Info & Quick Links */}
                     <div className="w-full md:w-[350px] space-y-6">
-                        
+
+                        {/* Información Académica */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <h3 className="font-bold text-lg mb-3 text-primary-900 flex items-center gap-2">
+                                🏫 Mi Centro Educativo
+                            </h3>
+                            {infoAcademica.centro ? (
+                                <p className="font-medium text-gray-800">{infoAcademica.centro.nombre}</p>
+                            ) : (
+                                <p className="text-red-500 text-sm font-bold">Centro no asignado.</p>
+                            )}
+
+                            <hr className="my-5 border-gray-100" />
+
+                            <h3 className="font-bold text-lg mb-3 text-primary-900 flex items-center gap-2">
+                                👨‍🏫 Mi Tutor FCT
+                            </h3>
+                            {infoAcademica.profesor ? (
+                                <div>
+                                    <p className="font-bold text-gray-800">{infoAcademica.profesor.nombre} {infoAcademica.profesor.apellidos}</p>
+                                    <p className="text-sm text-gray-600 mt-1">📧 {infoAcademica.profesor.email}</p>
+                                    <p className="text-xs font-bold text-green-800 bg-green-100 inline-block px-2 py-1 rounded mt-2">
+                                        ✅ Tutor Asignado
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg">
+                                    <p className="text-yellow-800 text-sm font-bold">Pendiente de asignar</p>
+                                    <p className="text-yellow-700 text-xs mt-1">
+                                        Un profesor de tu centro debe reclamar tu perfil como tutor antes de autorizar unas prácticas.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
                         {/* Summary Card */}
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="font-bold text-lg mb-6 text-primary-900">Resumen de solicitudes</h3>
@@ -103,7 +145,7 @@ export default function DashboardAlumno() {
                             <h3 className="text-xl font-bold text-primary-900">Ofertas destacadas</h3>
                             <Link to="/ofertas" className="text-sm font-semibold text-primary-900 hover:underline">Ver todas</Link>
                         </div>
-                        
+
                         <div className="space-y-4">
                             {ofertasDestacadas.length === 0 ? (
                                 <div className="bg-white p-8 rounded-xl shadow-sm text-center border border-gray-100 text-gray-500">

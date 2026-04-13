@@ -1,14 +1,14 @@
 /**
  * Componente: DashboardProfesor
  * Módulo: Views/Profesor
- * 
- * Componente del perfil Profesor. Dedicado a la supervisión y evaluación de prácticas activas.
+ * * Componente del perfil Profesor. Dedicado a la supervisión y evaluación de prácticas activas.
  * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
  */
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import client from '../../api/axios';
+import { Link } from 'react-router-dom';
 
 export default function DashboardProfesor() {
     const { user } = useAuth();
@@ -21,25 +21,37 @@ export default function DashboardProfesor() {
     useEffect(() => { cargarPracticas(); }, []);
 
     const cargarPracticas = async () => {
-        const res = await client.get('/profesor/practicas');
-        setPracticas(res.data);
+        try {
+            const res = await client.get('/profesor/practicas');
+            setPracticas(res.data);
+        } catch (error) {
+            console.error("Error al cargar las prácticas");
+        }
+    };
+
+    const aprobarInicio = async (id_practica) => {
+        if (!confirm("¿Estás seguro de autorizar el inicio de estas prácticas? El alumno pasará a estado 'En Curso'.")) return;
+
+        try {
+            await client.post(`/profesor/practicas/${id_practica}/aprobar`);
+            cargarPracticas();
+        } catch (error) {
+            alert(error.response?.data?.error || "Error al aprobar el inicio de la práctica.");
+        }
     };
 
     const submitEvaluacion = async (e) => {
         e.preventDefault();
         try {
             await client.post(`/profesor/practicas/${evaluandoId}/evaluar`, formEval);
-            alert("Práctica evaluada con éxito.");
             setEvaluandoId(null);
             cargarPracticas();
         } catch (error) { alert("Error al guardar la evaluación."); }
     };
 
-    // FUNCIÓN MÁGICA PARA DESCARGAR PDF CON AXIOS Y SANCTUM
     const descargarPDF = async (id_practica) => {
         try {
             const res = await client.get(`/practicas/${id_practica}/pdf`, { responseType: 'blob' });
-            // Crear un enlace temporal en memoria para descargar el Blob
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -50,35 +62,82 @@ export default function DashboardProfesor() {
         } catch (error) { alert("Error al generar el PDF."); }
     };
 
+    // Separamos las prácticas para darles diferente prioridad visual
+    const practicasPendientes = practicas.filter(p => p.estado === 'ESPERANDO_TUTOR');
+    const practicasActivas = practicas.filter(p => p.estado !== 'ESPERANDO_TUTOR');
+
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-primary-900 mb-2">Panel de Supervisión FCT</h1>
-                <p className="text-gray-600 mb-8">Bienvenido/a, Profesor/a {user?.nombre}. Aquí puedes evaluar las prácticas en curso.</p>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-primary-900 mb-2">Panel de Supervisión FCT</h1>
+                        <p className="text-gray-600">Bienvenido/a, Profesor/a {user?.nombre}. Aquí puedes evaluar las prácticas en curso.</p>
+                    </div>
+                    <Link to="/profesor/tutorias" className="bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg font-bold shadow-sm hover:bg-gray-50 transition flex items-center gap-2">
+                        👥 Gestionar mis Alumnos
+                    </Link>
+                </div>
 
-                {practicas.length === 0 ? (
+                {/* =========================================
+                    SECCIÓN DE AVISOS URGENTES (Sprint 7)
+                    ========================================= */}
+                {practicasPendientes.length > 0 && (
+                    <div className="mb-8">
+                        <h2 className="text-xl font-bold text-orange-800 mb-4 flex items-center gap-2">
+                            ⚠️ Requieren tu Autorización
+                        </h2>
+                        <div className="space-y-4">
+                            {practicasPendientes.map(p => (
+                                <div key={p.id_practica} className="bg-orange-50 p-6 rounded-xl shadow-sm border border-orange-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-orange-900">👨‍🎓 {p.alumno?.nombre} {p.alumno?.apellidos}</h3>
+                                        <p className="text-sm text-orange-800 mt-1">La empresa <strong>{p.oferta?.empresa?.nombre_comercial}</strong> ha aceptado a este alumno.</p>
+                                        <p className="text-sm text-orange-700">Puesto: {p.oferta?.titulo}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <button onClick={() => aprobarInicio(p.id_practica)} className="bg-orange-600 text-white px-5 py-2.5 rounded-lg font-bold hover:bg-orange-700 shadow transition animate-bounce">
+                                            ✅ Autorizar Inicio Oficial
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* =========================================
+                    SECCIÓN DE PRÁCTICAS ACTIVAS/FINALIZADAS
+                    ========================================= */}
+                <h2 className="text-xl font-bold text-primary-900 mb-4 flex items-center gap-2">
+                    📚 Historial y Prácticas en Curso
+                </h2>
+
+                {practicasActivas.length === 0 ? (
                     <div className="bg-white p-10 rounded-xl shadow-sm text-center text-gray-500 border border-gray-100">
-                        No hay alumnos realizando prácticas actualmente.
+                        No hay alumnos realizando o que hayan finalizado prácticas actualmente.
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {practicas.map(p => (
+                        {practicasActivas.map(p => (
                             <div key={p.id_practica} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
-                                    <h3 className="text-xl font-bold text-primary-900">👨‍🎓 {p.alumno.nombre} {p.alumno.apellidos}</h3>
-                                    <p className="text-sm text-gray-600 mt-1">🏢 Empresa: <strong>{p.oferta.empresa.nombre_comercial}</strong></p>
-                                    <p className="text-sm text-gray-500">Puesto: {p.oferta.titulo}</p>
+                                    <h3 className="text-xl font-bold text-primary-900">👨‍🎓 {p.alumno?.nombre} {p.alumno?.apellidos}</h3>
+                                    <p className="text-sm text-gray-600 mt-1">🏢 Empresa: <strong>{p.oferta?.empresa?.nombre_comercial}</strong></p>
+                                    <p className="text-sm text-gray-500">Puesto: {p.oferta?.titulo}</p>
                                 </div>
 
                                 <div className="text-right flex flex-col items-end gap-2">
-                                    {p.estado === 'EN_CURSO' ? (
+                                    {p.estado === 'EN_CURSO' && (
                                         <>
                                             <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold mb-2">En Curso (Pendiente Evaluar)</span>
                                             <button onClick={() => setEvaluandoId(p.id_practica)} className="bg-accent-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-accent-600 shadow-sm transition">
                                                 📝 Evaluar Alumno
                                             </button>
                                         </>
-                                    ) : (
+                                    )}
+
+                                    {p.estado === 'FINALIZADA' && (
                                         <>
                                             <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold mb-2">Finalizada - Nota: {p.valoracion?.nota_numerica}</span>
                                             <button onClick={() => descargarPDF(p.id_practica)} className="bg-primary-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-primary-800 shadow-sm transition flex items-center gap-2">
@@ -92,7 +151,7 @@ export default function DashboardProfesor() {
                     </div>
                 )}
 
-                {/* MODAL DE EVALUACIÓN (Se muestra si evaluandoId no es null) */}
+                {/* MODAL DE EVALUACIÓN */}
                 {evaluandoId && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                         <div className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full">

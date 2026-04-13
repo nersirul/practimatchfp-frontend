@@ -1,8 +1,7 @@
 /**
  * Componente: GestionCandidatos
  * Módulo: Views/Empresa
- * 
- * Componente del perfil Empresa. Facilita la creación de vacantes y la validación de postulantes.
+ * * Componente del perfil Empresa. Facilita la creación de vacantes y la validación de postulantes.
  * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
  */
 
@@ -22,12 +21,19 @@ export default function GestionCandidatos() {
     };
 
     const cambiarEstado = async (id_practica, nuevoEstado) => {
-        if (!confirm(`¿Estás seguro de marcar a este alumno como ${nuevoEstado}?`)) return;
+        // Mensajes personalizados para que la empresa sepa qué va a pasar
+        let mensajeConfirmacion = `¿Estás seguro de marcar a este alumno como ${nuevoEstado}?`;
+        if (nuevoEstado === 'ESPERANDO_TUTOR') {
+            mensajeConfirmacion = "¿Confirmas que quieres aceptar a este alumno? Su instituto recibirá una notificación para autorizar el inicio oficial de las prácticas.";
+        }
+
+        if (!confirm(mensajeConfirmacion)) return;
+
         try {
             await client.put(`/empresa/practicas/${id_practica}/estado`, { estado: nuevoEstado });
             cargarCandidatos();
         } catch (error) {
-            alert("Error al actualizar estado.");
+            alert(error.response?.data?.error || "Error al actualizar estado.");
         }
     };
 
@@ -50,24 +56,54 @@ export default function GestionCandidatos() {
                                         <h3 className="text-xl font-bold text-primary-900">{c.alumno.nombre} {c.alumno.apellidos}</h3>
                                         <div className="text-sm text-gray-600 mt-2 space-y-1">
                                             <p>🎓 Ciclo: <strong>{c.alumno.ciclo}</strong> ({c.alumno.modalidad_preferida})</p>
-                                            {/* Datos de contacto (Sprint 3.5) */}
+                                            {/* Datos de contacto */}
                                             <p>✉️ {c.alumno.email}</p>
                                             <p>📞 {c.alumno.telefono || 'No especificado'}</p>
                                         </div>
                                     </div>
 
                                     <div className="text-right">
-                                        <div className="mb-3">
-                                            <span className="text-xs text-gray-500 uppercase font-bold">Estado actual:</span><br />
-                                            <span className={`font-bold ${c.estado === 'SOLICITADA' ? 'text-yellow-600' : c.estado === 'EN_CURSO' ? 'text-green-600' : 'text-red-600'}`}>
-                                                {c.estado}
-                                            </span>
+                                        <div className="mb-3 flex flex-col items-end">
+                                            <span className="text-xs text-gray-500 uppercase font-bold mb-1">Estado actual:</span>
+
+                                            {/* RENDERIZADO VISUAL DEL ESTADO (Actualizado Sprint 7) */}
+                                            {c.estado === 'SOLICITADA' && (
+                                                <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold">
+                                                    Pendiente de tu revisión
+                                                </span>
+                                            )}
+                                            {c.estado === 'ESPERANDO_TUTOR' && (
+                                                <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
+                                                    ⏳ Esperando autorización del Instituto
+                                                </span>
+                                            )}
+                                            {c.estado === 'EN_CURSO' && (
+                                                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
+                                                    🚀 Prácticas en Curso
+                                                </span>
+                                            )}
+                                            {c.estado === 'FINALIZADA' && (
+                                                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">
+                                                    ✅ Prácticas Finalizadas
+                                                </span>
+                                            )}
+                                            {c.estado === 'RECHAZADA' && (
+                                                <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                                    ❌ Candidatura Rechazada
+                                                </span>
+                                            )}
                                         </div>
-                                        {/* Botones de acción */}
+
+                                        {/* Botones de acción: Solo salen si la práctica está recién solicitada */}
                                         {c.estado === 'SOLICITADA' && (
-                                            <div className="flex gap-2 justify-end">
-                                                <button onClick={() => cambiarEstado(c.id_practica, 'EN_CURSO')} className="bg-status-active text-status-activeText px-4 py-2 rounded font-bold hover:bg-green-200">Aceptar Candidato</button>
-                                                <button onClick={() => cambiarEstado(c.id_practica, 'RECHAZADA')} className="bg-red-100 text-red-700 px-4 py-2 rounded font-bold hover:bg-red-200">Rechazar</button>
+                                            <div className="flex gap-2 justify-end mt-4">
+                                                {/* NUEVO: Envía ESPERANDO_TUTOR en lugar de EN_CURSO */}
+                                                <button onClick={() => cambiarEstado(c.id_practica, 'ESPERANDO_TUTOR')} className="bg-primary-900 text-white px-4 py-2 rounded font-bold hover:bg-primary-800 shadow transition">
+                                                    ✅ Aceptar Candidato
+                                                </button>
+                                                <button onClick={() => cambiarEstado(c.id_practica, 'RECHAZADA')} className="bg-red-50 text-red-700 px-4 py-2 rounded font-bold hover:bg-red-100 transition border border-red-200">
+                                                    ❌ Rechazar
+                                                </button>
                                             </div>
                                         )}
                                     </div>

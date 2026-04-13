@@ -24,23 +24,23 @@ import GestionUsuarios from './pages/admin/GestionUsuarios';
 import DashboardAlumno from './pages/alumno/DashboardAlumno';
 import PerfilAlumno from './pages/alumno/PerfilAlumno';
 import BuscadorOfertas from './pages/alumno/BuscadorOfertas';
-import DetalleOferta from './pages/alumno/DetalleOferta'; 
-import MisCandidaturas from './pages/alumno/MisCandidaturas'; 
+import DetalleOferta from './pages/alumno/DetalleOferta';
+import MisCandidaturas from './pages/alumno/MisCandidaturas';
 
 // Páginas (Empresa)
 import DashboardEmpresa from './pages/empresa/DashboardEmpresa';
-import PerfilEmpresa from './pages/empresa/PerfilEmpresa'; 
+import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
 import CrearOferta from './pages/empresa/CrearOferta';
-import GestionCandidatos from './pages/empresa/GestionCandidatos'; 
+import GestionCandidatos from './pages/empresa/GestionCandidatos';
 
 // Páginas (Profesor)
 import DashboardProfesor from './pages/profesor/DashboardProfesor';
+import GestionTutorias from './pages/profesor/GestionTutorias'; // <-- NUEVA IMPORTACIÓN SPRINT 7
 
 /**
  * MainLayout - Plantilla estándar orientada a usuarios comunes.
  * Incluye la cabecera / Navbar por defecto.
- * 
- * @param {Object} props
+ * * @param {Object} props
  * @param {React.ReactNode} props.children Contenidos de la ruta
  * @returns {React.ReactElement}
  */
@@ -55,16 +55,18 @@ const MainLayout = ({ children }) => (
  * Raíz de Enrutamiento de la Aplicación.
  * Contiene la semántica y jerarquía de Rutas de todo el Frontend.
  * Incorpora un diseño responsivo basado en el perfil del usuario actual (AuthContext).
- * 
- * @returns {React.ReactElement}
+ * * @returns {React.ReactElement}
  */
 function App() {
   const { user } = useAuth();
 
   // Diccionario de flags para mapeo de renderizado condicional por rol
-  const isAdmin = user?.hasOwnProperty('id_admin');
-  const isAlumno = user?.hasOwnProperty('id_alumno');
-  const isProfesor = user?.hasOwnProperty('id_profesor');
+  const isAdmin = user && user.id_admin !== undefined;
+  const isAlumno = user && user.id_alumno !== undefined;
+  const isEmpresa = user && user.id_empresa !== undefined;
+
+  // Un profesor tiene id_profesor, PERO a diferencia del alumno, no tiene id_alumno
+  const isProfesor = user && user.id_profesor !== undefined && user.id_alumno === undefined;
 
   return (
     <Routes>
@@ -98,22 +100,25 @@ function App() {
           {/* Dispatcher Inteligente de Dashboard según quien logueó */}
           <Route path="/dashboard" element={
             <MainLayout>
-               {!user ? <Navigate to="/login" /> : (
-                 isProfesor ? <DashboardProfesor /> : (isAlumno ? <DashboardAlumno /> : <DashboardEmpresa />)
-               )}
+              {!user ? <Navigate to="/login" /> : (
+                isProfesor ? <DashboardProfesor /> : (isAlumno ? <DashboardAlumno /> : <DashboardEmpresa />)
+              )}
             </MainLayout>
           } />
 
           {/* Área Reclutamiento (Alumnos) */}
           <Route path="/alumno/perfil" element={<MainLayout><PerfilAlumno /></MainLayout>} />
           <Route path="/ofertas" element={<MainLayout><BuscadorOfertas /></MainLayout>} />
-          <Route path="/ofertas/:id" element={<MainLayout><DetalleOferta /></MainLayout>} /> 
-          <Route path="/mis-candidaturas" element={<MainLayout><MisCandidaturas /></MainLayout>} /> 
+          <Route path="/ofertas/:id" element={<MainLayout><DetalleOferta /></MainLayout>} />
+          <Route path="/mis-candidaturas" element={<MainLayout><MisCandidaturas /></MainLayout>} />
 
           {/* Área Gestión de Talento (Empresas) */}
           <Route path="/empresa/perfil" element={<MainLayout><PerfilEmpresa /></MainLayout>} />
           <Route path="/empresa/ofertas/crear" element={<MainLayout><CrearOferta /></MainLayout>} />
-          <Route path="/empresa/ofertas/:id_oferta/candidatos" element={<MainLayout><GestionCandidatos /></MainLayout>} /> 
+          <Route path="/empresa/ofertas/:id_oferta/candidatos" element={<MainLayout><GestionCandidatos /></MainLayout>} />
+
+          {/* Área Tutorización (Profesores) - NUEVA SECCIÓN SPRINT 7 */}
+          <Route path="/profesor/tutorias" element={<MainLayout><GestionTutorias /></MainLayout>} />
         </>
       )}
 

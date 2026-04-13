@@ -1,12 +1,11 @@
 /**
  * Componente: Registro
  * Módulo: Views/Public
- * 
- * Página o vista pública / general de la aplicación PractiMatch FP.
+ * * Página o vista pública / general de la aplicación PractiMatch FP.
  * Esta vista interactúa con el backend consumiendo su respectivo Controlador API de Laravel.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import client from '../api/axios';
 
@@ -16,12 +15,15 @@ export default function Registro() {
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(false);
 
+    // NUEVO: Estado para almacenar los centros educativos cargados del backend
+    const [centros, setCentros] = useState([]);
+
     // Estado único que engloba todos los campos posibles
     const [formData, setFormData] = useState({
         // Comunes
         email: '', password: '', telefono: '', direccion: '', ciudad: '',
         // Alumno & Profesor
-        nombre: '', apellidos: '',
+        nombre: '', apellidos: '', nombre_centro: '',
         // Solo Alumno
         nif: '', ciclo: '',
         // Solo Empresa
@@ -29,6 +31,12 @@ export default function Registro() {
         // Solo Profesor
         departamento: ''
     });
+
+    useEffect(() => {
+        client.get('/centros')
+            .then(res => setCentros(res.data))
+            .catch(err => console.error("Error al cargar centros:", err));
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -87,6 +95,26 @@ export default function Registro() {
                             <option value="profesor">👨‍🏫 Profesor (Tutor de Centro Educativo)</option>
                         </select>
                     </div>
+
+                    {/* NUEVO: BLOQUE DE CENTRO EDUCATIVO (Solo Alumno y Profesor) */}
+                    {(tipo === 'alumno' || tipo === 'profesor') && (
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <Label text="Centro Educativo" />
+                            <input
+                                list="centros-list"
+                                name="nombre_centro"
+                                required
+                                value={formData.nombre_centro}
+                                onChange={handleChange}
+                                placeholder="Empieza a escribir tu IES/Centro..."
+                                className="w-full p-2 border border-blue-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <datalist id="centros-list">
+                                {centros.map(c => <option key={c.id_centro} value={c.nombre} />)}
+                            </datalist>
+                            <p className="text-xs text-blue-600 mt-1 font-medium">Si tu centro no aparece, escríbelo completo y lo daremos de alta automáticamente.</p>
+                        </div>
+                    )}
 
                     {/* BLOQUE DINÁMICO: ALUMNO */}
                     {tipo === 'alumno' && (
