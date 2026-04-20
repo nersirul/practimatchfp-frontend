@@ -32,10 +32,12 @@ import DashboardEmpresa from './pages/empresa/DashboardEmpresa';
 import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
 import CrearOferta from './pages/empresa/CrearOferta';
 import GestionCandidatos from './pages/empresa/GestionCandidatos';
+import EditarOferta from './pages/empresa/EditarOferta';
 
 // Páginas (Profesor)
 import DashboardProfesor from './pages/profesor/DashboardProfesor';
-import GestionTutorias from './pages/profesor/GestionTutorias'; // <-- NUEVA IMPORTACIÓN SPRINT 7
+import GestionTutorias from './pages/profesor/GestionTutorias'; 
+import PerfilProfesor from './pages/profesor/PerfilProfesor';
 
 /**
  * MainLayout - Plantilla estándar orientada a usuarios comunes.
@@ -86,6 +88,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardAdmin />} />
           <Route path="/admin/tecnologias" element={<Tecnologias />} />
           <Route path="/admin/ofertas/validar" element={<ValidarOfertas />} />
+          <Route path="/admin/ofertas/:id_oferta/editar" element={<EditarOferta />} />
           <Route path="/admin/empresas/validar" element={<ValidarEmpresas />} />
           <Route path="/admin/usuarios" element={<GestionUsuarios />} />
         </Route>
@@ -115,10 +118,12 @@ function App() {
           {/* Área Gestión de Talento (Empresas) */}
           <Route path="/empresa/perfil" element={<MainLayout><PerfilEmpresa /></MainLayout>} />
           <Route path="/empresa/ofertas/crear" element={<MainLayout><CrearOferta /></MainLayout>} />
+          <Route path="/empresa/ofertas/:id_oferta/editar" element={<MainLayout><EditarOferta /></MainLayout>} />
           <Route path="/empresa/ofertas/:id_oferta/candidatos" element={<MainLayout><GestionCandidatos /></MainLayout>} />
 
           {/* Área Tutorización (Profesores) - NUEVA SECCIÓN SPRINT 7 */}
           <Route path="/profesor/tutorias" element={<MainLayout><GestionTutorias /></MainLayout>} />
+          <Route path="/profesor/perfil" element={<MainLayout><PerfilProfesor /></MainLayout>} />
         </>
       )}
 

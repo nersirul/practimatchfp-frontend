@@ -62,7 +62,6 @@ export default function DashboardProfesor() {
         } catch (error) { alert("Error al generar el PDF."); }
     };
 
-    // Separamos las prácticas para darles diferente prioridad visual
     const practicasPendientes = practicas.filter(p => p.estado === 'ESPERANDO_TUTOR');
     const practicasActivas = practicas.filter(p => p.estado !== 'ESPERANDO_TUTOR');
 
@@ -74,9 +73,22 @@ export default function DashboardProfesor() {
                         <h1 className="text-3xl font-bold text-primary-900 mb-2">Panel de Supervisión FCT</h1>
                         <p className="text-gray-600">Bienvenido/a, Profesor/a {user?.nombre}. Aquí puedes evaluar las prácticas en curso.</p>
                     </div>
-                    <Link to="/profesor/tutorias" className="bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg font-bold shadow-sm hover:bg-gray-50 transition flex items-center gap-2">
-                        👥 Gestionar mis Alumnos
-                    </Link>
+
+                    {/* AÑADIDO: Grupo de botones superior (Perfil y Tutorías) */}
+                    <div className="flex flex-wrap items-center gap-3">
+                        <Link
+                            to="/profesor/perfil"
+                            className="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-semibold px-5 py-2.5 rounded-lg shadow-sm flex items-center gap-2 transition-colors"
+                        >
+                            👨‍🏫 Editar Perfil
+                        </Link>
+                        <Link
+                            to="/profesor/tutorias"
+                            className="bg-accent-500 hover:bg-accent-600 text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm flex items-center gap-2 transition-colors"
+                        >
+                            👥 Gestionar mis Alumnos
+                        </Link>
+                    </div>
                 </div>
 
                 {/* =========================================
