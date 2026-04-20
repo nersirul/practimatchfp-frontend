@@ -21,7 +21,7 @@ export default function GestionCandidatos() {
     };
 
     const cambiarEstado = async (id_practica, nuevoEstado) => {
-        // Mensajes personalizados para que la empresa sepa qué va a pasar
+        // Determinación contextualizada de mensajes de confirmación
         let mensajeConfirmacion = `¿Estás seguro de marcar a este alumno como ${nuevoEstado}?`;
         if (nuevoEstado === 'ESPERANDO_TUTOR') {
             mensajeConfirmacion = "¿Confirmas que quieres aceptar a este alumno? Su instituto recibirá una notificación para autorizar el inicio oficial de las prácticas.";
@@ -66,7 +66,7 @@ export default function GestionCandidatos() {
                                         <div className="mb-3 flex flex-col items-end">
                                             <span className="text-xs text-gray-500 uppercase font-bold mb-1">Estado actual:</span>
 
-                                            {/* RENDERIZADO VISUAL DEL ESTADO (Actualizado Sprint 7) */}
+                                            {/* Renderizado Visual Condicionado por Estado del Flujo */}
                                             {c.estado === 'SOLICITADA' && (
                                                 <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold">
                                                     Pendiente de tu revisión
@@ -94,10 +94,10 @@ export default function GestionCandidatos() {
                                             )}
                                         </div>
 
-                                        {/* Botones de acción: Solo salen si la práctica está recién solicitada */}
+                                        {/* Bloque de Acciones Condicionales (Solo disponibles en estado SOLICITADA) */}
                                         {c.estado === 'SOLICITADA' && (
                                             <div className="flex gap-2 justify-end mt-4">
-                                                {/* NUEVO: Envía ESPERANDO_TUTOR en lugar de EN_CURSO */}
+                                                {/* Transición inicial condicionada a la validación secundaria de la entidad educativa */}
                                                 <button onClick={() => cambiarEstado(c.id_practica, 'ESPERANDO_TUTOR')} className="bg-primary-900 text-white px-4 py-2 rounded font-bold hover:bg-primary-800 shadow transition">
                                                     ✅ Aceptar Candidato
                                                 </button>

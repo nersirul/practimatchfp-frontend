@@ -20,7 +20,7 @@ export default function DashboardAdmin() {
     const [practicasRecientes, setPracticasRecientes] = useState([]);
     const [usuariosRecientes, setUsuariosRecientes] = useState([]);
 
-    // NUEVO: Estado para almacenar las ofertas y poder editarlas
+    // Estado contenedor para listar y habilitar la edición de ofertas recientes
     const [ofertasRecientes, setOfertasRecientes] = useState([]);
     const [cargando, setCargando] = useState(true);
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function DashboardAdmin() {
                 setPracticasRecientes(res.data.practicasRecientes);
                 setUsuariosRecientes(res.data.usuariosRecientes);
 
-                // NUEVO: Recibimos las ofertas (asegúrate de enviarlas desde el backend)
+                // Recepción de la cohorte de ofertas recientes emitidas por el Controlador
                 setOfertasRecientes(res.data.ofertasRecientes || []);
             } catch (error) {
                 console.error("Error cargando el dashboard de admin:", error);
@@ -148,7 +148,7 @@ export default function DashboardAdmin() {
                 </div>
             </div>
 
-            {/* SECCIÓN NUEVA: GESTIÓN RÁPIDA DE OFERTAS */}
+            {/* SECCIÓN: GESTIÓN RÁPIDA DE OFERTAS */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mt-6 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-gray-800">Control de Ofertas Recientes</h2>
@@ -180,7 +180,7 @@ export default function DashboardAdmin() {
                                         {oferta.estado === 'PENDIENTE' && <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">Pendiente</span>}
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        {/* EL BOTÓN MÁGICO QUE LLEVA AL COMPONENTE EditarOferta */}
+                                        {/* Enrutamiento directo al componente de edición de oferta */}
                                         <Link
                                             to={`/admin/ofertas/${oferta.id_oferta}/editar`}
                                             className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition"

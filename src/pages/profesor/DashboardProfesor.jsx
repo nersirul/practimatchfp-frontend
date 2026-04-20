@@ -74,7 +74,7 @@ export default function DashboardProfesor() {
                         <p className="text-gray-600">Bienvenido/a, Profesor/a {user?.nombre}. Aquí puedes evaluar las prácticas en curso.</p>
                     </div>
 
-                    {/* AÑADIDO: Grupo de botones superior (Perfil y Tutorías) */}
+                    {/* Grupo de navegación superior */}
                     <div className="flex flex-wrap items-center gap-3">
                         <Link
                             to="/profesor/perfil"
@@ -92,7 +92,7 @@ export default function DashboardProfesor() {
                 </div>
 
                 {/* =========================================
-                    SECCIÓN DE AVISOS URGENTES (Sprint 7)
+                    SECCIÓN DE AVISOS URGENTES
                     ========================================= */}
                 {practicasPendientes.length > 0 && (
                     <div className="mb-8">

@@ -15,7 +15,7 @@ export default function DashboardAlumno() {
     const [stats, setStats] = useState({ enviadas: 0, en_proceso: 0, seleccionado: 0 });
     const [ofertasDestacadas, setOfertasDestacadas] = useState([]);
 
-    // NUEVO: Estado para el Centro y el Tutor
+    // Estado contenedor para la recuperación del modelo académico.
     const [infoAcademica, setInfoAcademica] = useState({ centro: null, profesor: null });
     const [cargando, setCargando] = useState(true);
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function DashboardAlumno() {
     useEffect(() => {
         const cargarDashboard = async () => {
             try {
-                // Hacemos las dos peticiones a la vez para que cargue súper rápido
+                // Despliegue concurrente de peticiones HTTP para optimización de renderizado
                 const [resDashboard, resInfo] = await Promise.all([
                     client.get('/alumno/dashboard'),
                     client.get('/alumno/info-academica')

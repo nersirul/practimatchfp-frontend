@@ -67,7 +67,7 @@ function App() {
   const isAlumno = user && user.id_alumno !== undefined;
   const isEmpresa = user && user.id_empresa !== undefined;
 
-  // Un profesor tiene id_profesor, PERO a diferencia del alumno, no tiene id_alumno
+  // Identificador excluyente para el Rol de Profesor frente a posibles cruces con Alumno
   const isProfesor = user && user.id_profesor !== undefined && user.id_alumno === undefined;
 
   return (
@@ -121,7 +121,7 @@ function App() {
           <Route path="/empresa/ofertas/:id_oferta/editar" element={<MainLayout><EditarOferta /></MainLayout>} />
           <Route path="/empresa/ofertas/:id_oferta/candidatos" element={<MainLayout><GestionCandidatos /></MainLayout>} />
 
-          {/* Área Tutorización (Profesores) - NUEVA SECCIÓN SPRINT 7 */}
+          {/* Área de Tutorización (Módulo Docente) */}
           <Route path="/profesor/tutorias" element={<MainLayout><GestionTutorias /></MainLayout>} />
           <Route path="/profesor/perfil" element={<MainLayout><PerfilProfesor /></MainLayout>} />
         </>

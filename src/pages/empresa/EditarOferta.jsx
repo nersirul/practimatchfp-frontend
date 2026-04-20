@@ -21,7 +21,7 @@ export default function EditarOferta() {
         try {
             const [resTech, resOferta] = await Promise.all([
                 client.get('/tecnologias'),
-                client.get(`/ofertas/${id_oferta}`) // Reutilizamos el endpoint público de detalle
+                client.get(`/ofertas/${id_oferta}`) // Reutilización del endpoint público de detalle
             ]);
 
             setCatalogoTech(resTech.data);
@@ -34,7 +34,7 @@ export default function EditarOferta() {
                 vacantes: oferta.vacantes === null ? '' : oferta.vacantes,
                 es_remunerada: oferta.es_remunerada,
                 posibilidad_contratacion: oferta.posibilidad_contratacion,
-                tecnologias: oferta.tecnologias.map(t => t.id_tecnologia) // Extraemos solo los IDs
+                tecnologias: oferta.tecnologias.map(t => t.id_tecnologia) // Mapeo selectivo de Primary Keys
             });
         } catch (error) {
             alert("No se pudo cargar la oferta.");
@@ -65,10 +65,10 @@ export default function EditarOferta() {
                 vacantes: formData.vacantes === '' ? null : parseInt(formData.vacantes, 10)
             };
 
-            // Usamos la ruta compartida que creamos en api.php
+            // Persistencia de modificaciones mediante endpoint compartido
             await client.put(`/ofertas/${id_oferta}/editar`, payload);
             alert("¡Oferta actualizada con éxito!");
-            navigate(-1); // Vuelve a la pantalla anterior (Dashboard Empresa o Panel Admin)
+            navigate(-1); // Retorno al historial de navegación anterior
         } catch (error) {
             alert(error.response?.data?.error || "Error al actualizar la oferta.");
         }
@@ -76,7 +76,7 @@ export default function EditarOferta() {
 
     if (cargando) return <div className="text-center p-12 text-gray-500">Cargando datos de la oferta...</div>;
 
-    // EL JSX ES IDÉNTICO A CrearOferta.jsx, PERO CON EL TÍTULO CAMBIADO
+    // Estructura heredada de la vista de creación con ligeras adaptaciones de título al contexto de mutación
     return (
         <div className="max-w-4xl mx-auto p-6">
             <div className="flex justify-between items-center mb-6">

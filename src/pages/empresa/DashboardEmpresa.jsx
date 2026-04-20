@@ -35,7 +35,7 @@ export default function DashboardEmpresa() {
         }
     };
 
-    // NUEVA FUNCIÓN: Cerrar oferta definitivamente
+    // Cierre definitivo de vacante (Soft/Hard Disable)
     const cerrarOferta = async (id_oferta) => {
         if (!confirm("¿Estás seguro de cerrar esta oferta? No podrás volver a editarla ni activarla, y desaparecerá del buscador de alumnos.")) return;
         try {
@@ -106,7 +106,7 @@ export default function DashboardEmpresa() {
 
                                     <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
 
-                                        {/* ACCIONES CONDICIONALES: Solo si NO está cerrada */}
+                                        {/* Bloque de acciones condicionales: Deshabilitado en estado CERRADA */}
                                         {oferta.estado !== 'CERRADA' && (
                                             <>
                                                 <Link to={`/empresa/ofertas/${oferta.id_oferta}/editar`} className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition flex items-center gap-1">
