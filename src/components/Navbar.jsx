@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 
-// NUEVO: Importamos el logotipo directamente desde la carpeta assets
+// Importamos el logotipo directamente desde la carpeta assets
 import logo from '../assets/logo.png';
 
 export default function Navbar() {
@@ -25,17 +25,19 @@ export default function Navbar() {
     const closeMobileMenu = () => setIsMobileOpen(false);
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        // NUEVO: Cambiado bg-white por bg-[#f3f3f4]
+        <nav className="bg-[#f3f3f4] border-b border-gray-200 sticky top-0 z-50 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
 
-                    {/* Logotipo Dinámico */}
+                    {/* Logotipo Dinámico (Solo imagen, mismo espacio) */}
                     <div className="flex items-center">
-                        <Link to="/" onClick={closeMobileMenu} className="flex items-center gap-2 z-50">
-                            {/* NUEVO: Etiqueta img apuntando a la variable del logo */}
-                            <img src={logo} alt="Logotipo PractiMatch FP" className="w-8 h-8 object-contain" />
-
-                            <span className="text-2xl font-bold text-primary-900 tracking-tight">PractiMatch<span className="font-light">FP</span></span>
+                        <Link to="/" onClick={closeMobileMenu} className="flex items-center z-50">
+                            <img
+                                src={logo}
+                                alt="Logotipo PractiMatch FP"
+                                className="h-12 sm:h-14 w-auto max-w-[200px] sm:max-w-[240px] object-contain object-left"
+                            />
                         </Link>
                     </div>
 
@@ -65,7 +67,7 @@ export default function Navbar() {
                                 // Renderizado On-line: Avatar con mini-dropdown integrado
                                 <div className="relative">
                                     <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex items-center gap-3 text-sm font-medium text-gray-700 hover:text-black focus:outline-none">
-                                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
+                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                             <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zM8 11a5 5 0 00-5 5h14a5 5 0 00-5-5H8z" clipRule="evenodd" />
                                             </svg>
@@ -108,24 +110,24 @@ export default function Navbar() {
 
             {/* MENÚ DESPLEGABLE MÓVIL */}
             {isMobileOpen && (
-                <div className="md:hidden bg-gray-50 border-t border-gray-100 animate-fadeIn absolute w-full">
-                    <div className="px-4 pt-2 pb-6 space-y-2 shadow-inner">
+                <div className="md:hidden bg-white border-t border-gray-200 animate-fadeIn absolute w-full shadow-lg">
+                    <div className="px-4 pt-2 pb-6 space-y-2">
                         <Link to="/ofertas" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-bold text-primary-900 bg-primary-50">
                             💼 Explorar Ofertas
                         </Link>
-                        <Link to="/info-alumnos" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-primary-900">
+                        <Link to="/info-alumnos" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-900">
                             Alumnos
                         </Link>
-                        <Link to="/info-empresas" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-primary-900">
+                        <Link to="/info-empresas" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-900">
                             Empresas
                         </Link>
-                        <Link to="/como-funciona" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-primary-900">
+                        <Link to="/como-funciona" onClick={closeMobileMenu} className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-900">
                             ¿Cómo funciona?
                         </Link>
 
                         {/* Botón de login para móviles si no hay sesión */}
                         {!user && (
-                            <div className="pt-4 mt-2 border-t border-gray-200">
+                            <div className="pt-4 mt-2 border-t border-gray-100">
                                 <Link to="/login" onClick={closeMobileMenu} className="block w-full text-center bg-primary-900 text-white px-6 py-3 rounded-md font-bold hover:bg-primary-800 shadow-sm">
                                     Conectar &gt;
                                 </Link>
