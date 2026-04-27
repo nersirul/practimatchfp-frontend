@@ -8,8 +8,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function GestionCandidatos() {
+    
+    usePageTitle("Gestión de Candidatos - Prácticas Empresa");
+
     const { id_oferta } = useParams();
     const [candidatos, setCandidatos] = useState([]);
 

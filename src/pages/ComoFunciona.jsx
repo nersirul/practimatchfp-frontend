@@ -8,8 +8,12 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import usePageTitle from '../hooks/usePageTitle';
 
 const ComoFunciona = () => {
+
+  usePageTitle("¿Cómo Funciona? - PractiMatch FP");
+
   return (
     <div className="bg-gray-50 min-h-screen font-sans text-gray-800">
       {/* Hero Section */}

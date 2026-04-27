@@ -8,8 +8,12 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function Tecnologias() {
+    
+    usePageTitle("Gestor de Tecnologías");
+
     const [tecnologias, setTecnologias] = useState([]);
     const [nombre, setNombre] = useState('');
     const [editId, setEditId] = useState(null);

@@ -8,8 +8,12 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PerfilAlumno() {
+    
+    usePageTitle("Perfil del Alumno");
+
     const [perfil, setPerfil] = useState({ nombre: '', apellidos: '', ciclo: '', modalidad_preferida: 'PRESENCIAL' });
     const [misTecnologias, setMisTecnologias] = useState([]);
     const [catalogo, setCatalogo] = useState([]);

@@ -10,8 +10,12 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import client from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function DetalleOferta() {
+
+    usePageTitle("Detalle de Oferta");
+
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();

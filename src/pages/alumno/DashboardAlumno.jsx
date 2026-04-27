@@ -9,8 +9,12 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function DashboardAlumno() {
+
+    usePageTitle("Dashboard del Alumno");
+
     const { user } = useAuth();
     const [stats, setStats] = useState({ enviadas: 0, en_proceso: 0, seleccionado: 0 });
     const [ofertasDestacadas, setOfertasDestacadas] = useState([]);

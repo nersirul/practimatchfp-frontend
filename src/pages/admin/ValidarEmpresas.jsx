@@ -8,8 +8,12 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function ValidarEmpresas() {
+    
+    usePageTitle("Validar Empresas");
+
     const [empresas, setEmpresas] = useState([]);
 
     useEffect(() => { cargarPendientes(); }, []);

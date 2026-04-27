@@ -8,8 +8,12 @@
 
 import { Link } from 'react-router-dom';
 import heroImg from '../assets/hero-illustration.png';
+import usePageTitle from '../hooks/usePageTitle';
 
 export default function Home() {
+
+  usePageTitle("Inicio - PractiMatch FP");
+
   return (
     <div className="min-h-screen bg-[#f3f4f6]">
       {/* Hero Section */}

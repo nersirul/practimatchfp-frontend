@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import client from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PerfilProfesor() {
+    
+    usePageTitle("Perfil del Profesor - Supervisión FCT");
+
     const { user, setUser } = useAuth(); // Para actualizar el Navbar instantáneamente
     const navigate = useNavigate();
 

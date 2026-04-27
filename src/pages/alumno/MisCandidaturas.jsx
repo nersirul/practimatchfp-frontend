@@ -7,8 +7,12 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function MisCandidaturas() {
+
+    usePageTitle("Mis Candidaturas");
+    
     const [candidaturas, setCandidaturas] = useState([]);
 
     // Estados para el Modal de Valoración de 5 Estrellas

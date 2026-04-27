@@ -1,7 +1,6 @@
 /**
  * Cliente HTTP Axios - axios.js
- * 
- * Centraliza toda la comunicación asíncrona hacia el Backend (API Laravel).
+ * * Centraliza toda la comunicación asíncrona hacia el Backend (API Laravel).
  * Dispone de una URL base predefinida e interceptores inteligentes que inyectan 
  * de manera transparente los tokens de seguridad de Sanctum en las peticiones.
  */
@@ -9,7 +8,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api', 
+    baseURL: 'https://backend.ogallar.net/api', 
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

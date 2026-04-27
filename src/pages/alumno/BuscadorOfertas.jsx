@@ -9,8 +9,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function BuscadorOfertas() {
+    
+    usePageTitle("Buscador de Ofertas");
+    
     const [ofertas, setOfertas] = useState([]);
     const [catalogoTech, setCatalogoTech] = useState([]);
 

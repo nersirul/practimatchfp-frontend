@@ -6,8 +6,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function DashboardEmpresa() {
+    
+    usePageTitle("Dashboard - Prácticas Empresa");
+
     const [ofertas, setOfertas] = useState([]);
     const [cargando, setCargando] = useState(true);
 

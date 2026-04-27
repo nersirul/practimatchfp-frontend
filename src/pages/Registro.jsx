@@ -8,8 +8,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import client from '../api/axios';
+import usePageTitle from '../hooks/usePageTitle';
 
 export default function Registro() {
+    
+    usePageTitle("Registro - PractiMatch FP");
+
     const navigate = useNavigate();
     const [tipo, setTipo] = useState('alumno');
     const [error, setError] = useState('');

@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function EditarOferta() {
+    
+    usePageTitle("Editar Oferta - Prácticas Empresa");
+
     const { id_oferta } = useParams();
     const navigate = useNavigate();
     const [catalogoTech, setCatalogoTech] = useState([]);

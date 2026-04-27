@@ -8,9 +8,14 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PerfilEmpresa() {
+
+    usePageTitle("Perfil de la Empresa");
+    
     const [perfil, setPerfil] = useState({ nombre_comercial: '', cif: '', telefono_contacto: '', direccion: '', ciudad: '', descripcion: '' });
+
 
     useEffect(() => {
         client.get('/empresa/perfil').then(res => setPerfil(res.data));

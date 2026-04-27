@@ -9,8 +9,12 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import client from '../../api/axios';
 import { Link } from 'react-router-dom';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function DashboardProfesor() {
+    
+    usePageTitle("Dashboard Profesor - Supervisión FCT");
+    
     const { user } = useAuth();
     const [practicas, setPracticas] = useState([]);
 

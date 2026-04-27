@@ -10,8 +10,12 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import loginImg from '../assets/login-illustration.png';
+import usePageTitle from '../hooks/usePageTitle';
 
 export default function Login() {
+
+    usePageTitle("Iniciar Sesión - PractiMatch FP");
+
     const { login } = useAuth();
     const navigate = useNavigate();
 

@@ -8,8 +8,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function DashboardAdmin() {
+
+    usePageTitle("Panel de Administración");
+
     const [stats, setStats] = useState({
         usuariosTotales: 0,
         empresasActivas: 0,

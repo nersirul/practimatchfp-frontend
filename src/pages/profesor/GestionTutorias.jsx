@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function GestionTutorias() {
+    
+    usePageTitle("Gestión de Tutorías - Supervisión FCT");
+
     const [misAlumnos, setMisAlumnos] = useState([]);
     const [alumnosHuerfanos, setAlumnosHuerfanos] = useState([]);
 

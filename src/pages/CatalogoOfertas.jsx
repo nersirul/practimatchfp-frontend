@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import client from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
+import usePageTitle from '../hooks/usePageTitle';
 
 export default function CatalogoOfertas() {
+
+    usePageTitle("Catálogo de Ofertas - PractiMatch FP");
+    
     const [ofertas, setOfertas] = useState([]);
     const [cargando, setCargando] = useState(true);
     const { user } = useAuth(); // Comprobamos si hay alguien logueado

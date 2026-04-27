@@ -8,9 +8,13 @@
 
 import { useEffect, useState } from 'react';
 import client from '../../api/axios';
-import { useAuth } from '../../context/AuthContext'; // <-- IMPORTAMOS ESTO
+import { useAuth } from '../../context/AuthContext';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function GestionUsuarios() {
+
+    usePageTitle("Gestor de Usuarios");
+
     const { user } = useAuth(); // <-- OBTENEMOS EL USUARIO LOGUEADO
     const [tipoSeleccionado, setTipoSeleccionado] = useState('alumnos');
     const [usuarios, setUsuarios] = useState([]);
