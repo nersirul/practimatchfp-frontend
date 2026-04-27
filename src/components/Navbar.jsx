@@ -1,8 +1,8 @@
 /**
  * Componente Navbar.jsx
- * * Es la barra superior de todo el sitio web (tanto dentro como fuera del login).
- * Modela un menú adaptativo con un "hamburguesa" para móviles y un dropdown 
- * de avatar según el perfil extraído dinámicamente del AuthContext.
+ * * Es la barra superior de todo el sitio web.
+ * Se ha corregido la lógica de detección de roles y se ha personalizado
+ * el saludo al usuario para todos los perfiles (incluyendo Empresas).
  */
 
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,24 +13,48 @@ import { useState } from 'react';
 import logo from '../assets/logo.png';
 
 export default function Navbar() {
-    // Suscripción al bus de contexto para saber en vivo qué sesión existe.
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    // Estados para controlar los menús desplegables
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-    // Función para cerrar el menú móvil al hacer clic en un enlace
     const closeMobileMenu = () => setIsMobileOpen(false);
 
+    // FUNCIÓN AUXILIAR: Genera el saludo personalizado según el tipo de usuario
+    const renderGreeting = () => {
+        if (!user) return '';
+
+        // Caso Alumno: Nombre + Primer Apellido
+        if (user.id_alumno) {
+            const primerApellido = user.apellidos ? user.apellidos.split(' ')[0] : '';
+            return `Hola, ${user.nombre} ${primerApellido}`;
+        }
+
+        // Caso Empresa: Hola, Nombre Comercial
+        if (user.id_empresa) {
+            return `Hola, ${user.nombre_comercial}`;
+        }
+
+        // Caso Profesor (comprobamos que no sea alumno para evitar el bug anterior)
+        if (user.id_profesor && !user.id_alumno) {
+            return `Hola, ${user.nombre}`;
+        }
+
+        // Caso Administrador
+        if (user.id_admin) {
+            return `Hola, ${user.nombre}`;
+        }
+
+        return 'Mi Cuenta';
+    };
+
     return (
-        // NUEVO: Cambiado bg-white por bg-[#f3f3f4]
         <nav className="bg-[#f3f3f4] border-b border-gray-200 sticky top-0 z-50 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
 
-                    {/* Logotipo Dinámico (Solo imagen, mismo espacio) */}
+                    {/* Logotipo */}
                     <div className="flex items-center">
                         <Link to="/" onClick={closeMobileMenu} className="flex items-center z-50">
                             <img
@@ -41,7 +65,7 @@ export default function Navbar() {
                         </Link>
                     </div>
 
-                    {/* ENLACES DE ESCRITORIO (Ocultos en móviles) */}
+                    {/* ENLACES DE ESCRITORIO */}
                     <div className="hidden md:flex items-center space-x-8 text-gray-600 font-medium text-sm">
                         <Link to="/ofertas" className="text-primary-900 font-bold hover:text-accent-500 transition-colors flex items-center gap-1">
                             💼 Explorar Ofertas
@@ -51,20 +75,16 @@ export default function Navbar() {
                         <Link to="/como-funciona" className="hover:text-primary-900 transition-colors">¿Cómo funciona?</Link>
                     </div>
 
-                    {/* LADO DERECHO: Usuario y Menú Hamburguesa */}
+                    {/* LADO DERECHO */}
                     <div className="flex items-center gap-4">
-
-                        {/* Módulo Interactivo de Usuario */}
                         <div className="flex items-center">
                             {!user ? (
-                                // Renderizado Off-line
                                 <div className="hidden md:flex gap-4 items-center">
                                     <Link to="/login" className="bg-primary-900 text-white px-6 py-2 rounded-md font-medium hover:bg-primary-800 transition-colors">
                                         Conectar &gt;
                                     </Link>
                                 </div>
                             ) : (
-                                // Renderizado On-line: Avatar con mini-dropdown integrado
                                 <div className="relative">
                                     <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex items-center gap-3 text-sm font-medium text-gray-700 hover:text-black focus:outline-none">
                                         <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
@@ -72,12 +92,12 @@ export default function Navbar() {
                                                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zM8 11a5 5 0 00-5 5h14a5 5 0 00-5-5H8z" clipRule="evenodd" />
                                             </svg>
                                         </div>
-                                        <span className="hidden md:block font-semibold">
-                                            {user?.id_admin ? 'Administrador' : user?.id_empresa ? 'Empresa' : user?.id_profesor ? 'Profesor' : 'Alumno'}
+                                        {/* SALUDO PERSONALIZADO AQUÍ */}
+                                        <span className="hidden md:block font-bold text-primary-900">
+                                            {renderGreeting()}
                                         </span>
                                     </button>
 
-                                    {/* Menú flotante del Avatar */}
                                     {isProfileOpen && (
                                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100 z-50">
                                             <Link to="/dashboard" className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 font-medium" onClick={() => setIsProfileOpen(false)}>Mi Dashboard</Link>
@@ -88,13 +108,9 @@ export default function Navbar() {
                             )}
                         </div>
 
-                        {/* Botón Menú Hamburguesa (Solo Móvil) */}
+                        {/* Botón Móvil */}
                         <div className="flex items-center md:hidden">
-                            <button
-                                onClick={() => setIsMobileOpen(!isMobileOpen)}
-                                className="text-gray-500 hover:text-primary-900 focus:outline-none p-2"
-                                aria-label="Abrir menú"
-                            >
+                            <button onClick={() => setIsMobileOpen(!isMobileOpen)} className="text-gray-500 hover:text-primary-900 focus:outline-none p-2">
                                 <svg className="h-7 w-7 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     {isMobileOpen ? (
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -108,7 +124,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* MENÚ DESPLEGABLE MÓVIL */}
+            {/* MENÚ MÓVIL */}
             {isMobileOpen && (
                 <div className="md:hidden bg-white border-t border-gray-200 animate-fadeIn absolute w-full shadow-lg">
                     <div className="px-4 pt-2 pb-6 space-y-2">
@@ -125,7 +141,6 @@ export default function Navbar() {
                             ¿Cómo funciona?
                         </Link>
 
-                        {/* Botón de login para móviles si no hay sesión */}
                         {!user && (
                             <div className="pt-4 mt-2 border-t border-gray-100">
                                 <Link to="/login" onClick={closeMobileMenu} className="block w-full text-center bg-primary-900 text-white px-6 py-3 rounded-md font-bold hover:bg-primary-800 shadow-sm">
